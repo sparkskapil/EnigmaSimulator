@@ -25,6 +25,7 @@ namespace Enigma
             {
                 if (key.Length != 3)
                     throw new Exception("There are only 3 rotors and Key must have 3 characters");
+                key = key.ToUpper();
                 var chars = key.ToCharArray();
                 m_rotor1.SetKey(chars[0]);
                 m_rotor2.SetKey(chars[1]);
@@ -42,6 +43,7 @@ namespace Enigma
 
             public char Submit(char ch)
             {
+                ch = ch >= 97 ? (char)(ch - 32): ch; 
                 var index = ch - 'A';
 
                 //Rotate rotors
@@ -73,8 +75,8 @@ namespace Enigma
         }
         static void Main(string[] args)
         {
-            string InputString = "ENIGMA";
-            string RotorConfiguration = "DOG";
+            string InputString = "enigma";
+            string RotorConfiguration = "dog";
 
             Enigma enigma = new Enigma();
             enigma.SetKey(RotorConfiguration);
