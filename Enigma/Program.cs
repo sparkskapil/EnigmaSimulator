@@ -12,13 +12,11 @@ namespace Enigma
         {
             public Enigma()
             {
-                // TODO: these rotors can be created as static in global.
-                //
-                m_rotor3 = new Rotor("BDFHJLCPRTXVZNYEIWGAKMUSQO", 21);
-                m_rotor2 = new Rotor("AJDKSIRUXBLHWTMCQGZNPYFVOE", 4);
-                m_rotor1 = new Rotor("EKMFLGDQVZNTOWYHXUSPAIBRCJ", 17);
+                m_rotor3 = EnigmaComponents.Rotor3;
+                m_rotor2 = EnigmaComponents.Rotor2;
+                m_rotor1 = EnigmaComponents.Rotor1;
 
-                m_reflectorB = new Reflector("YRUHQSLDPXNGOKMIEBFZCWVJAT");
+                m_reflector = EnigmaComponents.ReflectorB;
             }
 
             public void SetKey(string key)
@@ -43,16 +41,16 @@ namespace Enigma
 
             public char Submit(char ch)
             {
-                ch = ch >= 97 ? (char)(ch - 32): ch; 
+                ch = ch >= 97 ? (char)(ch - 32) : ch;
                 var index = ch - 'A';
 
                 //Rotate rotors
                 m_rotor3.Rotate();
-                if(m_rotor3.isCycleComplete())
+                if (m_rotor3.isCycleComplete())
                 {
                     m_rotor2.Rotate();
                 }
-                if(m_rotor3.isCycleComplete())
+                if (m_rotor3.isCycleComplete())
                 {
                     m_rotor1.Rotate();
                 }
@@ -60,7 +58,7 @@ namespace Enigma
                 var res = m_rotor3.InputForward(index);
                 res = m_rotor2.InputForward(res);
                 res = m_rotor1.InputForward(res);
-                res = m_reflectorB.Reflect(res);
+                res = m_reflector.Reflect(res);
                 res = m_rotor1.InputBackward(res);
                 res = m_rotor2.InputBackward(res);
                 res = m_rotor3.InputBackward(res);
@@ -71,13 +69,14 @@ namespace Enigma
             private Rotor m_rotor2;
             private Rotor m_rotor3;
 
-            private Reflector m_reflectorB;
+            private Reflector m_reflector;
         }
         static void Main(string[] args)
         {
             string InputString = "enigma";
             string RotorConfiguration = "dog";
-
+            Console.WriteLine("Input String: {0}", InputString.ToUpper());
+            Console.WriteLine("Rotor Configuration: {0}", RotorConfiguration.ToUpper());
             Enigma enigma = new Enigma();
             enigma.SetKey(RotorConfiguration);
             Console.WriteLine("Output String: \n");
